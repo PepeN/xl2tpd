@@ -24,7 +24,7 @@
 # define bzero(S1, LEN)     ((void)memset(S1,  0, LEN))
 # define bcmp(S1,S2,LEN)    ((memcmp(S2, S1, LEN)==0)?0:1)
 
-/* pre 2.6 solaris didn't include random(), etc prototypes
+/* pre 2.6 solaris didn't include random(), etc prototypes 
  * <stdlib.h> (as of 2.6) has the correct prototypes.
  */
 

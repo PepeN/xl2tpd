@@ -86,7 +86,7 @@ struct call
     struct timeval lastsent;    /* When did we last send something? */
     _u16 data_seq_num;          /* Sequence for next payload packet */
     _u16 data_rec_seq_num;      /* Sequence for next received payload packet */
-    _u16 closeSs;               /* What number was in Ns when we started to
+    _u16 closeSs;               /* What number was in Ns when we started to 
                                    close? */
     int pLr;                    /* Last packet received by peer */
     struct lns *lns;            /* LNS that owns us */

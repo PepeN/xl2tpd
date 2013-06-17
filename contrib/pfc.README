@@ -11,5 +11,5 @@ usage: pfc <expressiona> > /etc/ppp/your.active.filter
 (specify precompiled-active-filter=/etc/ppp/your.active.filter in the ppp
  options file)
 
-example: ./pfc ntp and ldap
+example: ./pfc ntp and ldap 
 

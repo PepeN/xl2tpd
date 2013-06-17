@@ -82,7 +82,7 @@ struct schedule_entry *schedule (struct timeval tv, void (*func) (void *),
                                  void *data)
 {
     /* Schedule func to be run at relative time tv with data
-       as arguments.  If it has already expired, run it
+       as arguments.  If it has already expired, run it 
        immediately.  The queue should be in order of
        increasing time */
     struct schedule_entry *p = events, *q = NULL;

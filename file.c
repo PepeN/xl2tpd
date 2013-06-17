@@ -53,14 +53,14 @@ int init_config ()
     deflac = (struct lac *) calloc (1, sizeof (struct lac));
 
     f = fopen (gconfig.configfile, "r");
-    if (!f)
+    if (!f) 
     {
         f = fopen (gconfig.altconfigfile, "r");
         if (f)
         {
 	     l2tp_log (LOG_WARNING, "%s: Using old style config files %s and %s\n",
 		__FUNCTION__, gconfig.altconfigfile, gconfig.altauthfile);
-            strncpy (gconfig.authfile, gconfig.altauthfile,
+            strncpy (gconfig.authfile, gconfig.altauthfile, 
             	sizeof (gconfig.authfile));
         }
         else
@@ -1096,8 +1096,8 @@ int set_lns (char *word, char *value, int context, void *item)
             d[0] = 0;
             d++;
         }
-#if 0
-		// why would you want to lookup hostnames at this time?
+#if 0 
+		// why would you want to lookup hostnames at this time? 
         hp = gethostbyname (value);
         if (!hp)
         {
@@ -1213,7 +1213,7 @@ int set_rand_source (char *word, char *value, int context, void *item)
      */
     seconds = time(NULL);
     srand(seconds);
-
+ 
     if (context != CONTEXT_GLOBAL)
     {
         l2tp_log(LOG_WARNING, "%s: %s not valid in context %d\n",
@@ -1252,7 +1252,7 @@ int parse_config (FILE * f)
     /* Read in the configuration file handed to us */
     /* FIXME: I should check for incompatible options */
     int context = 0;
-    char buf[1024];
+    char buf[1024]; 
     char *s, *d, *t;
     int linenum = 0;
     int def = 0;
@@ -1446,7 +1446,7 @@ int parse_config (FILE * f)
             l2tp_log (LOG_DEBUG, "parse_config: field is %s, value is %s\n", s, t);
 #endif
             /* Okay, bit twidling is done.  Let's handle this */
-
+            
             switch (parse_one_option (s, t, context | def, data))
             {
             case -1:
@@ -1457,7 +1457,7 @@ int parse_config (FILE * f)
                 l2tp_log (LOG_CRIT, "parse_config: line %d: Unknown field '%s'\n",
                      linenum, s);
                 return -1;
-            }
+            }            
         }
     }
     return 0;
@@ -1466,7 +1466,7 @@ int parse_config (FILE * f)
 int parse_one_option(char *word, char *value, int context, void *item)
 {
     struct keyword *kw;
-
+    
     for (kw = words; kw->keyword; kw++)
     {
         if (!strcasecmp (word, kw->keyword))

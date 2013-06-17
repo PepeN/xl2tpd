@@ -12,7 +12,7 @@ implementations such as Openswan.
 Example configuration files for such a setup are included in this RPM.
 
 xl2tpd works by opening a pseudo-tty for communicating with pppd.
-It runs completely in userspace but supports kernel mode L2TP.
+It runs completely in userspace but supports kernel mode L2TP. 
 
 xl2tpd supports IPsec SA Reference tracking to enable overlapping internak
 NAT'ed IP's by different clients (eg all clients connecting from their

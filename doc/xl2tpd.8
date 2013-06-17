@@ -3,8 +3,8 @@
 xl2tpd \- Layer 2 Tunnelling Protocol Daemon
 .SH "DESCRIPTION"
 A Layer 2 Tunneling Protocol VPN client/daemon for Linux and other POSIX-based
-OSs. Based off of L2TPd 0.61 from
-  http://www.marko.net/l2tp
+OSs. Based off of L2TPd 0.61 from 
+  http://www.marko.net/l2tp 
 and patches collected by Jacco de Leeuw at
   http://www.jacco2.dds.nl/networking/openswan-l2tp.html
 
@@ -14,28 +14,28 @@ Currently maintained by Xelerance
 xl2tpd implements the Layer 2 Tunnelling Protocol, defined by RFC 2661.
 
 .SH "OPTIONS"
-.TP
+.TP 
 .B -D
 This option prevents xl2tpd from detaching from the terminal and
-daemonizing.
+daemonizing.  
 
-.TP
+.TP 
 .B -c <config file>
 Tells xl2tpd to use an alternate config file.  Default is
 /etc/xl2tpd/xl2tpd.conf. Fallback configuration file is
 /etc/l2tpd/l2tpd.conf
 
-.TP
+.TP 
 .B -s <secret file>
 Tells xl2tpd to use an alternate "secrets" file.  Default is
 /etc/xl2tpd/l2tp-secrets
 
-.TP
+.TP 
 .B -p <pid file>
 Tells xl2tpd to use an alternate pid file.  Default is
 /var/run/xl2tpd/xl2tpd.pid
 
-.TP
+.TP 
 .B -C <control file>
 Tells xl2tpd to use an alternate control file.  Default is
 /var/run/xl2tpd/l2tp-control
@@ -43,7 +43,7 @@ Tells xl2tpd to use an alternate control file.  Default is
 
 .SH "FILES"
 
-\fB\fR/etc/xl2tpd/xl2tpd.conf \fB\fR/etc/xl2tpd/l2tp\-secrets
+\fB\fR/etc/xl2tpd/xl2tpd.conf \fB\fR/etc/xl2tpd/l2tp\-secrets 
 \fB\fR/var/run/l2tp\-control
 .SH "BUGS"
 

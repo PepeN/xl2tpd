@@ -11,7 +11,7 @@ Other:
 * Support LCP initial/final states
 * Maybe do something with private groups
 * Tunnel and call lookups should be hashes, not lists
-* Meaningful error message about pppd problems...for
+* Meaningful error message about pppd problems...for 
   either not installed, or no kernel support (if possible)
 
 Niceties:

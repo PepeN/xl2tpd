@@ -77,7 +77,7 @@ struct buffer *new_outgoing (struct tunnel *t)
 
 inline void recycle_outgoing (struct buffer *buf, struct sockaddr_in peer)
 {
-    /*
+    /* 
      * This should only be used for ZLB's!
      */
     buf->start = buf->rstart + sizeof (struct control_hdr);
@@ -179,7 +179,7 @@ int control_finish (struct tunnel *t, struct call *c)
     char dummy_buf[128] = "/var/l2tp/"; /* jz: needed to read /etc/ppp/var.options - just kick it if you don't like */
     char passwdfd_buf[32] = ""; /* buffer for the fd, not the password */
     int i;
-    int pppd_passwdfd[2];
+    int pppd_passwdfd[2];            
     int tmptid,tmpcid;
 
     if (c->msgtype < 0)
@@ -392,7 +392,7 @@ int control_finish (struct tunnel *t, struct call *c)
         /* FIXME: Do we need to be sure they specified a version number?
          *   Theoretically, yes, but we don't have anything in the code
          *   to actually *do* anything with it, so...why check at this point?
-         * We shouldn't be requiring a bearer capabilities avp to be present in
+         * We shouldn't be requiring a bearer capabilities avp to be present in 
          * SCCRQ and SCCRP as they aren't required
          if (t->bc < 0 ) {
          if (DEBUG) l2tp_log(LOG_DEBUG,
@@ -516,7 +516,7 @@ int control_finish (struct tunnel *t, struct call *c)
         /* FIXME: Do we need to be sure they specified a version number?
          *   Theoretically, yes, but we don't have anything in the code
          *   to actually *do* anything with it, so...why check at this point?
-         * We shouldn't be requiring a bearer capabilities avp to be present in
+         * We shouldn't be requiring a bearer capabilities avp to be present in 
          * SCCRQ and SCCRP as they aren't required
          if (t->bc < 0 ) {
          if (DEBUG) log(LOG_DEBUG,
@@ -713,7 +713,7 @@ int control_finish (struct tunnel *t, struct call *c)
                 l2tp_log (LOG_DEBUG,
                      "%s: Peer tried to initiate call without call ID\n",
                      __FUNCTION__);
-            /* Here it doesn't make sense to use the needclose flag because
+            /* Here it doesn't make sense to use the needclose flag because 
                the call p did not receive any packets */
             call_close (p);
             return -EINVAL;
@@ -877,7 +877,7 @@ int control_finish (struct tunnel *t, struct call *c)
             if (c->lac->debug)
                 po = add_opt (po, "debug");
             if (c->lac->password[0])
-            {
+            {                    
                 if (pipe (pppd_passwdfd) == -1)
                 {
                   l2tp_log (LOG_DEBUG,
@@ -1062,8 +1062,8 @@ int control_finish (struct tunnel *t, struct call *c)
         /*  jz: just show some information */
         l2tp_log (LOG_INFO,
 		  "parameters: Local: %d , Remote: %d , Serial: %d , Pid: %d , Tunnelid: %d , Phoneid: %s\n",
-		  c->ourcid, c->cid, c->serno, c->pppd, t->ourtid, c->dial_no);
-
+		  c->ourcid, c->cid, c->serno, c->pppd, t->ourtid, c->dial_no); 
+	
         opt_destroy (po);
         if (c->lac)
             c->lac->rtries = 0;
@@ -1181,7 +1181,7 @@ inline int check_control (const struct buffer *buf, struct tunnel *t,
             l2tp_log (LOG_DEBUG,
                  "%s: Received out of order control packet on tunnel %d (got %d, expected %d)\n",
                  __FUNCTION__, t->tid, h->Ns, t->control_rec_seq_num);
-        if (((h->Ns < t->control_rec_seq_num) &&
+        if (((h->Ns < t->control_rec_seq_num) && 
             ((t->control_rec_seq_num - h->Ns) < 32768)) ||
             ((h->Ns > t->control_rec_seq_num) &&
             ((t->control_rec_seq_num - h->Ns) > 32768)))
@@ -1296,7 +1296,7 @@ inline int check_payload (struct buffer *buf, struct tunnel *t,
     }
     if (buf->len < MIN_PAYLOAD_HDR_LEN)
     {
-        /* has to be at least MIN_PAYLOAD_HDR_LEN
+        /* has to be at least MIN_PAYLOAD_HDR_LEN 
            no matter what.  we'll look more later */
         if (DEBUG)
         {
@@ -1477,9 +1477,9 @@ inline int expand_payload (struct buffer *buf, struct tunnel *t,
     if (new_hdr->Ns != c->data_seq_num)
     {
         /* RFC1982-esque comparison of serial numbers */
-        if (((new_hdr->Ns < c->data_rec_seq_num) &&
+        if (((new_hdr->Ns < c->data_rec_seq_num) && 
             ((c->data_rec_seq_num - new_hdr->Ns) < 32768)) ||
-            ((new_hdr->Ns > c->data_rec_seq_num) &&
+            ((new_hdr->Ns > c->data_rec_seq_num) && 
             ((c->data_rec_seq_num - new_hdr->Ns) > 32768)))
         {
 #ifdef DEBUG_FLOW
@@ -1581,7 +1581,7 @@ inline int write_packet (struct buffer *buf, struct tunnel *t, struct call *c,
         return -EIO;
     }
     /*
-     * Skip over header
+     * Skip over header 
      */
     _u16 offset = ((struct payload_hdr*)(buf->start))->o_size;  // For FIXME:
     buf->start += sizeof(struct payload_hdr) + offset;
@@ -1818,10 +1818,10 @@ inline int handle_packet (struct buffer *buf, struct tunnel *t,
                     res = write_packet (buf, t, c, SYNC_FRAMING);
                     if (res)
                         return res;
-                    /*
+                    /* 
                        * Assuming we wrote to the ppp driver okay, we should
                        * do something about ZLB's unless *we* requested no
-                       * window size or if they we have turned off our fbit.
+                       * window size or if they we have turned off our fbit. 
                      */
 
 /*					if (c->ourfbit && (c->ourrws > 0)) {

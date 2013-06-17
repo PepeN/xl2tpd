@@ -9,7 +9,7 @@
  * xl2tpd-control client main file
  *
  */
-
+ 
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
@@ -93,7 +93,7 @@ int main (int argc, char *argv[])
 {
     char* control_filename = NULL;
     char* tunnel_name = NULL;
-    struct command_t* command = NULL;
+    struct command_t* command = NULL;    
     int i; /* argv iterator */
 
     if (argv[1] && !strncmp (argv[1], "--help", 6))
@@ -124,7 +124,7 @@ int main (int argc, char *argv[])
     {
         control_filename = strdup (CONTROL_PIPE);
     }
-    print_error (DEBUG_LEVEL, "set control filename to %s\n", control_filename);
+    print_error (DEBUG_LEVEL, "set control filename to %s\n", control_filename);    
 
     /* parse command name */
     for (command = commands; command->name; command++)
@@ -135,7 +135,7 @@ int main (int argc, char *argv[])
             break;
         }
     }
-
+    
     if (command->name)
     {
         print_error (DEBUG_LEVEL, "get command %s\n", command->name);
@@ -143,7 +143,7 @@ int main (int argc, char *argv[])
         print_error (ERROR_LEVEL, "error: no such command %s\n", argv[i]);
         return -1;
     }
-
+    
     /* get tunnel name */
     if (i >= argc)
     {
@@ -151,16 +151,16 @@ int main (int argc, char *argv[])
         usage();
         return -1;
     }
-    tunnel_name = argv[i++];
+    tunnel_name = argv[i++];    
     /* check tunnel name for whitespaces */
     if (strstr (tunnel_name, " "))
     {
         print_error (ERROR_LEVEL,
             "error: tunnel name shouldn't include spaces\n");
-        usage();
+        usage();        
         return -1;
     }
-
+    
     char buf[CONTROL_PIPE_MESSAGE_SIZE] = "";
     FILE* mesf = fmemopen (buf, CONTROL_PIPE_MESSAGE_SIZE, "w");
 
@@ -176,7 +176,7 @@ int main (int argc, char *argv[])
             "error: unable to open %s for reading.\n", result_filename);
         return -2;
     }
-
+   
     /* turn off O_NONBLOCK */
     if (fcntl (result_fd, F_SETFL, O_RDONLY) == -1) {
         print_error (ERROR_LEVEL,
@@ -184,7 +184,7 @@ int main (int argc, char *argv[])
             strerror(errno));
         return -2;
     }
-
+    
     /* pass result filename to command */
     fprintf (mesf, "@%s ", result_filename);
     if (ferror (mesf))
@@ -192,7 +192,7 @@ int main (int argc, char *argv[])
         print_error (ERROR_LEVEL, "internal error: message buffer to short");
         return -2;
     }
-
+    
     /* format command with remaining arguments */
     int command_res = command->handler (
         mesf, tunnel_name, argc - i, argv + i
@@ -202,9 +202,9 @@ int main (int argc, char *argv[])
         print_error (ERROR_LEVEL, "error: command parse error\n");
         return -1;
     }
-
+    
     fflush (mesf);
-
+    
     if (ferror (mesf))
     {
         print_error (ERROR_LEVEL,
@@ -212,7 +212,7 @@ int main (int argc, char *argv[])
             CONTROL_PIPE_MESSAGE_SIZE - 1);
         return -1;
     }
-
+    
     print_error (DEBUG_LEVEL, "command to be passed:\n%s\n", buf);
 
     /* try to open control file for writing */
@@ -235,23 +235,23 @@ int main (int argc, char *argv[])
         }
         return -1;
     }
-
+    
     /* pass command to control pipe */
     write (control_fd, buf, ftell (mesf));
     close (control_fd);
-
+    
     /* read result from pipe */
     char rbuf[CONTROL_PIPE_MESSAGE_SIZE] = "";
     int command_result_code = read_result (
         result_fd, rbuf, CONTROL_PIPE_MESSAGE_SIZE
     );
     printf ("%s", rbuf);
-
+    
     /* cleaning up */
-
+    
     close (result_fd);
     unlink (result_filename);
-
+    
     return command_result_code;
 }
 
@@ -282,11 +282,11 @@ int read_result(int result_fd, char* buf, ssize_t size)
         }
     } while (readed == 0);
     buf[readed] = '\0';
-
+    
     /* scan result code */
     int command_result_code = -3;
     sscanf (buf, "%i", &command_result_code);
-
+    
     return command_result_code;
 }
 
@@ -321,7 +321,7 @@ int command_add
                 fprintf (mesf, " "); /* restore space */
             }
         } else {
-            fprintf (mesf, ";"); /* end up option */
+            fprintf (mesf, ";"); /* end up option */        
             wait_key = 1; /* now we again waiting for key */
         }
     }

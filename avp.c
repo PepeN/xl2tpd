@@ -473,7 +473,7 @@ int result_code_avp (struct tunnel *t, struct call *c, void *data,
 
    /*
     * from prepare_StopCCN and prepare_CDN, note missing htons() call
-    * http://www.opensource.apple.com/source/ppp/ppp-412.3/Drivers/L2TP/L2TP-plugin/l2tp.c
+    * http://www.opensource.apple.com/source/ppp/ppp-412.3/Drivers/L2TP/L2TP-plugin/l2tp.c 
     */
     if (((result & 0xFF) == 0) && (result >> 8 != 0))
     {

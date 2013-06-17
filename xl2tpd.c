@@ -140,7 +140,7 @@ void show_status (void)
         while (c)
         {
             cnt++;
-            l2tp_log (LOG_WARNING,
+            l2tp_log (LOG_WARNING, 
                      "Call %s # %lu, ID = %d (local), %d (remote), serno = %u,"
                      " data_seq_num = %d, data_rec_seq_num = %d,"
                      " pLr = %d, tx = %u bytes (%u), rx= %u bytes (%u)",
@@ -184,9 +184,9 @@ void show_status (void)
 
 void null_handler(int sig)
 {
-       /* FIXME
-        * A sighup is received when a call is terminated, unknown origine ..
-        * I catch it and ll looks good, but ..
+       /* FIXME 
+        * A sighup is received when a call is terminated, unknown origine .. 
+        * I catch it and ll looks good, but .. 
         */
 }
 
@@ -201,7 +201,7 @@ void child_handler (int signal)
      * Oops, somebody we launched was killed.
      * It's time to reap them and close that call.
      * But first, we have to find out what PID died.
-     * unfortunately, pppd will
+     * unfortunately, pppd will 
      */
     struct tunnel *t;
     struct call *c;
@@ -245,7 +245,7 @@ void child_handler (int signal)
                          c->cid );
                     }
                     c->needclose = -1;
-                    /*
+                    /* 
                      * OK...pppd died, we can go ahead and close the pty for
                      * it
                      */
@@ -442,7 +442,7 @@ int start_pppd (struct call *c, struct ppp_opts *opts)
             l2tp_log (LOG_WARNING, "%s: unable to allocate pty, abandoning!\n",
                       __FUNCTION__);
             return -EINVAL;
-        }
+        } 
 
         /* set fd opened above to not echo so we don't see read our own packets
            back of the file descriptor that we just wrote them to */
@@ -474,7 +474,7 @@ int start_pppd (struct call *c, struct ppp_opts *opts)
 #endif
 #ifdef __uClinux__
     c->pppd = vfork ();
-#else
+#else 
     c->pppd = fork ();
 #endif
 
@@ -490,7 +490,7 @@ int start_pppd (struct call *c, struct ppp_opts *opts)
 
         close (0); /* redundant; the dup2() below would do that, too */
         close (1); /* ditto */
-        /* close (2); No, we want to keep the connection to /dev/null. */
+        /* close (2); No, we want to keep the connection to /dev/null. */ 
 #ifdef USE_KERNEL
        if (!kernel_support)
 #endif
@@ -904,13 +904,13 @@ int parse_one_line_lac (char* bufp, struct lac *tc)
     /* FIXME: I should check for incompatible options */
     char *s, *d, *t;
     int linenum = 0;
-
+    
     s = strtok (bufp, ";");
-    // parse options token by token
+    // parse options token by token    
     while (s != NULL)
     {
         linenum++;
-
+        
         while ((*s < 33) && *s)
             s++;                /* Skip over beginning white space */
         t = s + strlen (s);
@@ -938,7 +938,7 @@ int parse_one_line_lac (char* bufp, struct lac *tc)
             __FUNCTION__, s, t);
 #endif
         /* Okay, bit twidling is done.  Let's handle this */
-
+        
         switch (parse_one_option (s, t, CONTEXT_LAC, tc))
         {
         case -1:
@@ -978,7 +978,7 @@ void do_control ()
 
     bzero(buf, sizeof(buf));
     buf[0]='\0';
-
+    
     char* res_filename; /* name of file to write result of command */
     FILE* resf; /* stream for write result of command */
 
@@ -1037,7 +1037,7 @@ void do_control ()
 #ifdef DEBUG_CONTROL
             l2tp_log (LOG_DEBUG, "%s: Attempting to tunnel to %s\n",
                       __FUNCTION__, host);
-#endif
+#endif            
             if (l2tp_call (host, UDP_LISTEN_PORT, NULL, NULL))
                 write_res (resf, "%02i OK\n", 0);
             else
@@ -1045,7 +1045,7 @@ void do_control ()
             break;
         case 'c':
             switch_io = 1;  /* jz: Switch for Incoming - Outgoing Calls */
-
+            
             tunstr = strtok (&bufp[1], delims);
 
             /* Are these passed on the command line? */
@@ -1072,7 +1072,7 @@ void do_control ()
                 } else {
                     l2tp_log (LOG_DEBUG,
                               "Session '%s' already active!\n", lac->entname);
-                    write_res (resf, "%02i Session '%s' already active!\n", 1,
+                    write_res (resf, "%02i Session '%s' already active!\n", 1, 
                                  lac->entname);
                 }
                 break;
@@ -1095,15 +1095,15 @@ void do_control ()
             else
                 write_res (resf, "%02i Error\n", 1);
             break;
-
+            
        case 'o':          /* jz: option 'o' for doing a outgoing call */
             switch_io = 0;  /* jz: Switch for incoming - outgoing Calls */
-
+            
             sub_str = strchr (bufp, ' ') + 1;
             tunstr = strtok (sub_str, " "); /* jz: using strtok function to get */
             tmp_ptr = strtok (NULL, " ");   /*     params out of the pipe       */
             strcpy (dial_no_tmp, tmp_ptr);
-
+            
             lac = laclist;
             while (lac && strcasecmp (lac->entname, tunstr)!=0)
             {
@@ -1120,7 +1120,7 @@ void do_control ()
                 } else {
                     l2tp_log (LOG_DEBUG, "Session '%s' already active!\n",
                               lac->entname);
-                    write_res (resf, "%02i Session '%s' already active!\n", 1,
+                    write_res (resf, "%02i Session '%s' already active!\n", 1, 
                                lac->entname);
                 }
                 break;
@@ -1143,7 +1143,7 @@ void do_control ()
             else
                 write_res (resf, "%02i Error\n", 1);
             break;
-
+            
         case 'h':
             callstr = strchr (bufp, ' ') + 1;
             call = atoi (callstr);
@@ -1199,8 +1199,8 @@ void do_control ()
             break;
         case 'a':
             /* add new or modify existing lac configuration */
-            {
-                int create_new_lac = 0;
+            {               
+                int create_new_lac = 0; 
                 tunstr = strtok (&bufp[1], delims);
                 if ((!tunstr) || (!strlen (tunstr)))
                 {
@@ -1210,7 +1210,7 @@ void do_control ()
                     break;
                 }
                 /* go to the end  of tunnel name*/
-                bufp = tunstr + strlen (tunstr) + 1;
+                bufp = tunstr + strlen (tunstr) + 1; 
                 /* try to find lac with _tunstr_ name in laclist */
                 lac = laclist;
                 while (lac)
@@ -1290,13 +1290,13 @@ void do_control ()
                 prev_lac->next = lac->next;
             free(lac);
             lac = NULL;
-            write_res (resf, "%02i OK\n", 0);
+            write_res (resf, "%02i OK\n", 0);            
             break;
         default:
             l2tp_log (LOG_DEBUG, "Unknown command %c\n", bufp[0]);
             write_res (resf, "%02i Unknown command %c\n", 1, bufp[0]);
         }
-
+        
         if (resf)
         {
             fclose (resf);
@@ -1463,7 +1463,7 @@ static void consider_pidfile() {
     }
 }
 
-static void open_controlfd()
+static void open_controlfd() 
 {
     control_fd = open (gconfig.controlfile, O_RDONLY | O_NONBLOCK, 0600);
     if (control_fd < 0)
@@ -1472,7 +1472,7 @@ static void open_controlfd()
              __FUNCTION__, gconfig.controlfile);
         exit (1);
     }
-
+   
     /* turn off O_NONBLOCK */
     if(fcntl(control_fd, F_SETFL, O_RDONLY)==-1) {
        l2tp_log(LOG_CRIT, "Can not turn off nonblocking mode for controlfd: %s\n",

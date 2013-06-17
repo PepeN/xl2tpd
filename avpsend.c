@@ -37,7 +37,7 @@ void add_header(struct buffer *buf, _u8 length, _u16 type) {
 	add_nonmandatory_header(buf, length|MBIT, type);
 }
 
-/*
+/* 
  * These routines should add avp's to a buffer
  * to be sent
  */

@@ -42,7 +42,7 @@ static int syslog_nesting = 0;
 void init_log()
 {
     static int logopen=0;
-    
+
     if(!logopen) {
 	SYSLOG_CALL( openlog (BINARY, LOG_PID, LOG_DAEMON) );
 	logopen=1;
@@ -56,7 +56,7 @@ void l2tp_log (int level, const char *fmt, ...)
     va_start (args, fmt);
     vsnprintf (buf, sizeof (buf), fmt, args);
     va_end (args);
-    
+
     if(gconfig.daemon) {
 	init_log();
 	SYSLOG_CALL( syslog (level, "%s", buf) );
@@ -186,12 +186,12 @@ inline void swaps (void *buf_v, int len)
     }
 #else
 
-    /* Reverse byte order (if proper to do so) 
+    /* Reverse byte order (if proper to do so)
        to make things work out easier */
     int x;
 	struct hw { _u16 s; } __attribute__ ((packed)) *p = (struct hw *) buf_v;
 	for (x = 0; x < len / 2; x++, p++)
-		p->s = ntohs(p->s); 
+		p->s = ntohs(p->s);
 #endif
 }
 

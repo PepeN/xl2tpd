@@ -5,19 +5,19 @@ xl2tpd.conf \- L2TPD configuration file
 The xl2tpd.conf file contains configuration information for xl2tpd, the implementation of l2tp protocol.
 
 The configuration file is composed of sections and parameters. Each section
-has a given name which will be used when using the configuration FIFO 
+has a given name which will be used when using the configuration FIFO
 (normaly /var/run/l2tp\-control). See xl2tpd.8  for more details.
 
-The specific given name 
+The specific given name
 .B default
 will specify parameters applicables for all the following sections.
 .SH "GLOBAL SECTION"
-.TP 
+.TP
 .B auth file
 Specify where to find the authentication file used to authenticate
 l2tp tunnels. The default is /etc/l2tpd/l2tp\-secrets.
 
-.TP 
+.TP
 .B ipsec saref
 Use IPsec Security Association trackinng. When this is enabled, packets
 received by xl2tpd should have to extra fields (refme and refhim) which
@@ -31,7 +31,7 @@ recvmsg() calls.
 
 Values can be yes or no. The default is no.
 
-.TP 
+.TP
 .B saref refinfo
 When using IPsec Security Association trackinng, a new setsockopt is used.
 Since this is not (yet?) an official Linux kernel option, we got bumped.
@@ -39,16 +39,16 @@ Openswan upto 2.6.35 for linux kernels up to 2.6.35 used a saref num of 22.
 Linux 3.6.36+ uses 22 for IP_NODEFRAG. We moved our IP_IPSEC_REFINFO to 30.
 If not set, the default is to use 30. For older SAref patched kernels, use 22.
 
-.TP 
+.TP
 .B listen-addr
 The IP address of the interface on which the daemon listens.  By default,
 it listens on INADDR_ANY (0.0.0.0), meaning it listens on all interfaces.
 
-.TP 
+.TP
 .B port
 Specify which UDP port xl2tpd should use. The default is 1701.
 
-.TP 
+.TP
 .B access control
 If set to yes, the xl2tpd process will only accept connections from
 peers addresses specified in the following sections. The default is no.
@@ -77,12 +77,12 @@ Set this to yes to enable syslog output of FSM debugging information.
 Set this to yes to enable syslog output of tunnel debugging information.
 
 .SH "LNS SECTION"
-.TP 
+.TP
 .B exclusive
 If set to yes, only one control tunnel will be allowed to be built
 between 2 peers. CHECK
 
-.TP 
+.TP
 .B (no) ip range
 Specify the range of ip addresses the LNS will assign to the connecting
 LAC PPP tunnels. Multiple ranges can be defined. Using the 'no'
@@ -98,56 +98,56 @@ to no.
 .B assign ip
 Set this to no if xl2tpd should not assign IP addresses out of the pool
 defined with the
-.B ip range 
+.B ip range
 option.  This can be useful if you have some other means to assign IP
 addresses, e. g. a pppd that supports RADIUS AAA.
 
 
-.TP 
+.TP
 .B (no) lac
 Specify the ip addresses of LAC's which are allowed to connect to xl2tpd
-acting as a LNS. The format is the same as the 
-.B ip range 
+acting as a LNS. The format is the same as the
+.B ip range
 option.
 
-.TP 
+.TP
 .B hidden bit
 If set to yes, xl2tpd will use the AVP hiding feature of L2TP. To get
 more information about hidden AVP's and AVP in general, refer to rfc2661
 (add URL?)
 
-.TP 
+.TP
 .B local ip
 Use the following IP as xl2tpd's own ip address.
 
-.TP 
+.TP
 .B length bit
 If set to yes, the length bit present in the l2tp packet payload
 will be used.
 
-.TP 
+.TP
 .B (refuse | require) chap
-Will require or refuse the remote peer to get authenticated via CHAP for the 
+Will require or refuse the remote peer to get authenticated via CHAP for the
 ppp authentication.
 
-.TP 
+.TP
 .B (refuse | require) pap
-Will require or refuse the remote peer to get authenticated via PAP for the 
+Will require or refuse the remote peer to get authenticated via PAP for the
 ppp authentication.
 
-.TP 
+.TP
 .B (refuse | require) authentication
 Will require or refuse the remote peer to authenticate itself.
 
-.TP 
+.TP
 .B unix authentication
 If set to yes, /etc/passwd will be used for remote peer ppp authentication.
 
-.TP 
+.TP
 .B hostname
 Will report this as the xl2tpd hostname in negociation.
 
-.TP 
+.TP
 .B ppp debug
 This will enable the debug for pppd.
 
@@ -155,31 +155,31 @@ This will enable the debug for pppd.
 .B pass peer
 Pass the peer's IP address to pppd as ipparam.  Enabled by default.
 
-.TP 
+.TP
 .B pppoptfile
 Specify the path for a file which contains pppd configuration parameters
 to be used.
 
-.TP 
+.TP
 .B call rws
 This option is deprecated and no longer functions.  It used to be used
 to define the flow control window size for individual L2TP calls or
 sessions.  The L2TP standard (RFC2661) no longer defines flow control or
 window sizes on calls or sessions.
 
-.TP 
+.TP
 .B tunnel rws
 This defines the window size of the control channel.  The window size is
 defined as the number of outstanding unacknowledged packets, not as a
 number of bytes.
 
-.TP 
+.TP
 .B flow bits
 If set to yes, sequence numbers will be included in the communication.
 The feature to use sequence numbers in sessions is currently broken and
 does not function.
 
-.TP 
+.TP
 .B challenge
 If set to yes, use challenge authentication to authenticate peer.
 
@@ -197,28 +197,28 @@ described in the LNS section may be used in a LAC context, where
 it make common sense (essentially l2tp procotols tuning flags and
 authentication / ppp related ones).
 
-.TP 
+.TP
 .B lns
 Set the dns name or ip address of the LNS to connect to.
 
-.TP 
+.TP
 .B redial
 If set to yes, xl2tpd will attempts to redial if the call get
 disconected.  Note that, if enabled, xl2tpd will keep passwords in
 memory: a potental security risk.
 
-.TP 
+.TP
 .B redial timeout
 Wait X seconds before redial. The redial option must be set to yes
 to use this option.  Defaults to 30 seconds.
 
-.TP 
-.B max redial 
+.TP
+.B max redial
 Will give up redial tries after X attempts.
 
 .SH "FILES"
 
-\fB\fR/etc/xl2tpd/xl2tpd.conf \fB\fR/etc/xl2tpd/l2tp\-secrets 
+\fB\fR/etc/xl2tpd/xl2tpd.conf \fB\fR/etc/xl2tpd/l2tp\-secrets
 \fB\fR/var/run/xl2tpd/l2tp\-control
 .SH "BUGS"
 

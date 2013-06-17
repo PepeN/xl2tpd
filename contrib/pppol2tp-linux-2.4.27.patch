@@ -5,7 +5,7 @@ Index: linux-2.4.27-l2tp/Documentation/Configure.help
 @@ -9913,6 +9913,16 @@ CONFIG_PPPOE
    on cvs.samba.org.  The required support will be present in the next
    ppp release (2.4.2).
- 
+
 +PPP over L2TP
 +config PPPOL2TP
 +  Support for PPP-over-L2TP socket family. L2TP is a protocol used by
@@ -40,7 +40,7 @@ Index: linux-2.4.27-l2tp/drivers/net/Makefile
  obj-$(CONFIG_PPP_BSDCOMP) += bsd_comp.o
  obj-$(CONFIG_PPPOE) += pppox.o pppoe.o
 +obj-$(CONFIG_PPPOL2TP) += pppox.o pppol2tp.o
- 
+
  obj-$(CONFIG_SLIP) += slip.o
  ifeq ($(CONFIG_SLIP_COMPRESSED),y)
 Index: linux-2.4.27-l2tp/drivers/net/pppol2tp.c
@@ -2642,11 +2642,11 @@ Index: linux-2.4.27-l2tp/drivers/net/pppox.c
 +++ linux-2.4.27-l2tp/drivers/net/pppox.c
 @@ -121,10 +121,17 @@ static int pppox_create(struct socket *s
  	int err = 0;
- 
+
  	if (protocol < 0 || protocol > PX_MAX_PROTO)
 -	    return -EPROTOTYPE;
 +		return -EPROTOTYPE;
- 
+
 +#ifdef CONFIG_KMOD
 +	if (proto[protocol] == NULL) {
 +		char buffer[32];
@@ -2657,9 +2657,9 @@ Index: linux-2.4.27-l2tp/drivers/net/pppox.c
  	if (proto[protocol] == NULL)
 -	    return -EPROTONOSUPPORT;
 +		return -EPROTONOSUPPORT;
- 
+
  	err = (*proto[protocol]->create)(sock);
- 
+
 Index: linux-2.4.27-l2tp/include/linux/hash.h
 ===================================================================
 --- /dev/null
@@ -2730,7 +2730,7 @@ Index: linux-2.4.27-l2tp/include/linux/if_ppp.h
 @@ -107,6 +107,21 @@ struct ifpppcstatsreq {
  	struct ppp_comp_stats stats;
  };
- 
+
 +/* For PPPIOCGL2TPSTATS */
 +struct pppol2tp_ioc_stats {
 +	__u16	tunnel_id;	/* redundant */
@@ -2748,13 +2748,13 @@ Index: linux-2.4.27-l2tp/include/linux/if_ppp.h
 +
  #define ifr__name       b.ifr_ifrn.ifrn_name
  #define stats_ptr       b.ifr_ifru.ifru_data
- 
+
 @@ -143,6 +158,7 @@ struct ifpppcstatsreq {
  #define PPPIOCDISCONN	_IO('t', 57)		/* disconnect channel */
  #define PPPIOCATTCHAN	_IOW('t', 56, int)	/* attach to ppp channel */
  #define PPPIOCGCHAN	_IOR('t', 55, int)	/* get ppp channel number */
 +#define	PPPIOCGL2TPSTATS _IOR('t', 54, struct pppol2tp_ioc_stats)
- 
+
  #define SIOCGPPPSTATS   (SIOCDEVPRIVATE + 0)
  #define SIOCGPPPVER     (SIOCDEVPRIVATE + 1)	/* NEVER change this!! */
 Index: linux-2.4.27-l2tp/include/linux/if_pppol2tp.h
@@ -2836,7 +2836,7 @@ Index: linux-2.4.27-l2tp/include/linux/if_pppox.h
 @@ -1,6 +1,6 @@
  /***************************************************************************
   * Linux PPP over X - Generic PPP transport layer sockets
-- * Linux PPP over Ethernet (PPPoE) Socket Implementation (RFC 2516) 
+- * Linux PPP over Ethernet (PPPoE) Socket Implementation (RFC 2516)
 + * Linux PPP over Ethernet (PPPoE) Socket Implementation (RFC 2516)
   *
   * This file supplies definitions required by the PPP over Ethernet driver
@@ -2846,26 +2846,26 @@ Index: linux-2.4.27-l2tp/include/linux/if_pppox.h
  #include <linux/ppp_channel.h>
  #endif /* __KERNEL__ */
 +#include <linux/if_pppol2tp.h>
- 
+
  /* For user-space programs to pick up these definitions
   * which they wouldn't get otherwise without defining __KERNEL__
 @@ -37,30 +38,48 @@
  #define PF_PPPOX	AF_PPPOX
  #endif /* !(AF_PPPOX) */
- 
--/************************************************************************ 
-- * PPPoE addressing definition 
-- */ 
--typedef __u16 sid_t; 
--struct pppoe_addr{ 
--       sid_t           sid;                    /* Session identifier */ 
--       unsigned char   remote[ETH_ALEN];       /* Remote address */ 
--       char            dev[IFNAMSIZ];          /* Local device to use */ 
--}; 
-- 
--/************************************************************************ 
-- * Protocols supported by AF_PPPOX 
-- */ 
+
+-/************************************************************************
+- * PPPoE addressing definition
+- */
+-typedef __u16 sid_t;
+-struct pppoe_addr{
+-       sid_t           sid;                    /* Session identifier */
+-       unsigned char   remote[ETH_ALEN];       /* Remote address */
+-       char            dev[IFNAMSIZ];          /* Local device to use */
+-};
+-
+-/************************************************************************
+- * Protocols supported by AF_PPPOX
+- */
 +/************************************************************************
 + * PPPoE addressing definition
 + */
@@ -2881,17 +2881,17 @@ Index: linux-2.4.27-l2tp/include/linux/if_pppox.h
 + */
  #define PX_PROTO_OE    0 /* Currently just PPPoE */
 -#define PX_MAX_PROTO   1	
-- 
--struct sockaddr_pppox { 
--       sa_family_t     sa_family;            /* address family, AF_PPPOX */ 
--       unsigned int    sa_protocol;          /* protocol identifier */ 
--       union{ 
--               struct pppoe_addr       pppoe; 
--       }sa_addr; 
--}__attribute__ ((packed)); 
+-
+-struct sockaddr_pppox {
+-       sa_family_t     sa_family;            /* address family, AF_PPPOX */
+-       unsigned int    sa_protocol;          /* protocol identifier */
+-       union{
+-               struct pppoe_addr       pppoe;
+-       }sa_addr;
+-}__attribute__ ((packed));
 +#define PX_PROTO_OL2TP 1 /* Now L2TP also */
 +#define PX_MAX_PROTO   2
- 
+
 +/* The use of a union isn't viable because the size of this struct
 + * must stay fixed over time -- applications use sizeof(struct
 + * sockaddr_pppox) to fill it. Use protocol specific sockaddr types
@@ -2917,7 +2917,7 @@ Index: linux-2.4.27-l2tp/include/linux/if_pppox.h
 +	unsigned int    sa_protocol;    /* protocol identifier */
 +	struct pppol2tp_addr pppol2tp;
 +}__attribute__ ((packed));
- 
+
  /*********************************************************************
   *
 Index: linux-2.4.27-l2tp/include/linux/list.h
@@ -2925,19 +2925,19 @@ Index: linux-2.4.27-l2tp/include/linux/list.h
 --- linux-2.4.27-l2tp.orig/include/linux/list.h
 +++ linux-2.4.27-l2tp/include/linux/list.h
 @@ -3,7 +3,9 @@
- 
+
  #if defined(__KERNEL__) || defined(_LVM_H_INCLUDE)
- 
+
 +#include <linux/stddef.h>
  #include <linux/prefetch.h>
 +#include <asm/system.h>
- 
+
  /*
   * Simple doubly linked list implementation.
 @@ -254,6 +256,159 @@ static inline void list_splice_init(stru
  	     pos = list_entry(pos->member.next, typeof(*pos), member),	\
  		     prefetch(pos->member.next))
- 
+
 +/*
 + * These are non-NULL pointers that will result in page faults
 + * under normal circumstances, used to verify that nobody uses
@@ -3092,7 +3092,7 @@ Index: linux-2.4.27-l2tp/include/linux/list.h
 +	     pos = n)
 +
  #endif /* __KERNEL__ || _LVM_H_INCLUDE */
- 
+
  #endif
 Index: linux-2.4.27-l2tp/include/linux/socket.h
 ===================================================================
@@ -3103,6 +3103,6 @@ Index: linux-2.4.27-l2tp/include/linux/socket.h
  #define SOL_NETBEUI	267
  #define SOL_LLC		268
 +#define SOL_PPPOL2TP	269
- 
+
  /* IPX options */
  #define IPX_TYPE	1

@@ -12,7 +12,7 @@
 # /usr/sbin/rcxl2tpd
 #
 # LSB compliant service control script; see http://www.linuxbase.org/spec/
-# 
+#
 # System startup script for L2TP daemon xl2tpd
 #
 ### BEGIN INIT INFO
@@ -25,7 +25,7 @@
 # Description:    Start xl2tpd to provide L2TP VPN tunnels
 #	normally used with IPsec (openswan)
 ### END INIT INFO
-# 
+#
 # Note on Required-Start: It does specify the init script ordering,
 # not real dependencies. Depencies have to be handled by admin
 # resp. the configuration tools (s)he uses.
@@ -68,7 +68,7 @@ rc_reset
 # 5 - program is not installed
 # 6 - program is not configured
 # 7 - program is not running
-# 
+#
 # Note that starting an already running service, stopping
 # or restarting a not-running service as well as the restart
 # with force-reload (in case signalling is not supported) are
@@ -80,7 +80,7 @@ case "$1" in
 	## Start daemon with startproc(8). If this fails
 	## the echo return value is set appropriate.
 
-	# NOTE: startproc returns 0, even if service is 
+	# NOTE: startproc returns 0, even if service is
 	# already running to match LSB spec.
 	startproc $XL2TPD_BIN >/dev/null 2>&1
 

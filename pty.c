@@ -147,7 +147,7 @@ int getPtyMaster(char *ttybuf, int ttybuflen)
 
     l2tp_log (LOG_WARNING, "%s: failed to use pts -- using legacy ptys\n", __FUNCTION__);
     fd = getPtyMaster_pty(&a,&b);
-    
+
     if(fd >= 0) {
 	snprintf(ttybuf, ttybuflen, "/dev/tty%c%c", a, b);
 	return fd;

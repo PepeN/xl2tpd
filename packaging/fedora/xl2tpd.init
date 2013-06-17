@@ -45,7 +45,7 @@ start() {
 	fi
 	daemon $SERVICE
 	RETVAL=$?
-	echo 
+	echo
 	if [ $RETVAL -eq 0 ];then
 	   touch /var/lock/subsys/$SERVICE
 	else

@@ -65,7 +65,7 @@ struct control_hdr
 #define CLBIT(ver) (ver & 0x4000)       /* Length bit present.  Must be 1
                                            for control messages */
 
-#define CZBITS(ver) (ver &0x37F8)       /* Reserved bits:  We must drop 
+#define CZBITS(ver) (ver &0x37F8)       /* Reserved bits:  We must drop
                                            anything with these there */
 
 #define CFBIT(ver) (ver & 0x0800)       /* Presence of Ns and Nr fields
@@ -99,7 +99,7 @@ struct payload_hdr
 #define DEFAULT_MAX_RETRIES 95   /* give us more time to debug */
 #endif
 
-#define DEFAULT_RWS_SIZE   4    /* Default max outstanding 
+#define DEFAULT_RWS_SIZE   4    /* Default max outstanding
                                    control packets in queue */
 #define DEFAULT_TX_BPS		10000000        /* For outgoing calls, report this speed */
 #define DEFAULT_RX_BPS		10000000
@@ -236,7 +236,7 @@ extern int get_entropy (unsigned char *, int);
 #endif
 
 
-/* 
+/*
  * This is just some stuff to take
  * care of kernel definitions
  */

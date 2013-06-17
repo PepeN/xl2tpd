@@ -481,8 +481,8 @@ int decrypt_avp (char *buf, struct tunnel *t)
             MD5Final (digest, &t->chal_us.md5);
             cnt = 0;
         }
-        /* at the beginning of each segment, we save the current segment (16 octets or less) of cipher 
-         * so that the next round of MD5 (if there is a next round) hash could use it 
+        /* at the beginning of each segment, we save the current segment (16 octets or less) of cipher
+         * so that the next round of MD5 (if there is a next round) hash could use it
          */
         if (cnt == 0)
         {
@@ -493,7 +493,7 @@ int decrypt_avp (char *buf, struct tunnel *t)
         *ptr = *ptr ^ digest[cnt++];
         ptr++;
     }
-    /* Hopefully we're all nice and decrypted now.  Let's rewrite the header. 
+    /* Hopefully we're all nice and decrypted now.  Let's rewrite the header.
        First save the old flags, and get the new stuff */
     flags = old_hdr->length & 0xF000 & ~HBIT;
     len = ntohs (new_hdr->attr) + sizeof (struct avp_hdr);

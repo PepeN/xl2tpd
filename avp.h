@@ -48,7 +48,7 @@ extern char *msgtypes[];
  */
 
 #define AMBIT(len) (len & 0x8000)       /* Mandatory bit: If this is
-                                           set on an unknown AVP, 
+                                           set on an unknown AVP,
                                            we MUST terminate */
 
 #define AHBIT(len) (len & 0x4000)       /* Hidden bit: Specifies
